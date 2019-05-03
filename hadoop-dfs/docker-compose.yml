@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  namenode:
+    container_name: namenode
+    build: .
+    ports:
+     - "9871:9871"
+     - "9870:9870"
+    networks:
+      default:
+        ipv4_address: 172.17.0.2
+    extra_hosts:
+     - "node-master:172.17.0.2"
+     - "node1:172.17.0.3"
+     - "node2:172.17.0.4"
+    depends_on:
+      - "datanode"
+      - "datanode2"
+    command: [ "bash", "start_hadoop.sh","true"]
+  datanode:
+    container_name: datanode
+    build: .
+    networks:
+      default:
+        ipv4_address: 172.17.0.3
+    extra_hosts:
+     - "node-master:172.17.0.2"
+     - "node1:172.17.0.3"
+     - "node2:172.17.0.4"
+    command: [ "bash", "start_hadoop.sh","false"]
+  datanode2:
+    container_name: datanode2
+    build: .
+    networks:
+      default:
+        ipv4_address: 172.17.0.4
+    extra_hosts:
+     - "node-master:172.17.0.2"
+     - "node1:172.17.0.3"
+     - "node2:172.17.0.4"
+    command: [ "bash", "start_hadoop.sh","false"]
